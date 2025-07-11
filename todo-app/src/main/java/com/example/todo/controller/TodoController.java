@@ -1,6 +1,6 @@
 package com.example.todo.controller;
 
-import com.example.todo.Todo;
+import com.example.todo.entity.Todo;
 import com.example.todo.service.TodoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
