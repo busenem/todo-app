@@ -1,9 +1,11 @@
 package com.example.todo.controller;
 
-import com.example.todo.Todo;
+import com.example.todo.entity.Todo;
 import com.example.todo.service.TodoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,9 +25,16 @@ public class TodoController {
 
     //  GET: Belirli ID'li Todo'yu getir
     @GetMapping("/{id}")
-    public Optional<Todo> getTodoById(@PathVariable Long id) {
-        return todoService.getTodoById(id);
+    public ResponseEntity<?> getTodoById(@PathVariable Long id) {
+        Optional<Todo> todo = todoService.getTodoById(id);
+        if (todo.isPresent()) {
+            return ResponseEntity.ok(todo.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Todo bulunamadı");
+        }
     }
+
+
 
     //  POST: Yeni Todo oluştur
     @PostMapping
