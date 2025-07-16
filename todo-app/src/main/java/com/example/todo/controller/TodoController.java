@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-@RestController
+@RestController // Bu sınıf REST API'dir, JSON veri döner
 @RequestMapping("/api/todos") // URL'ler bu kökten başlar: localhost:8080/api/todos
 public class TodoController {
 
