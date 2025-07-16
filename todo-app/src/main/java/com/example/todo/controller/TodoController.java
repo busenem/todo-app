@@ -1,11 +1,10 @@
 package com.example.todo.controller;
 
 import com.example.todo.entity.Todo;
+
 import com.example.todo.service.TodoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,9 +13,11 @@ import java.util.Optional;
 @RequestMapping("/api/todos") // URL'ler bu kökten başlar: localhost:8080/api/todos
 public class TodoController {
 
-    @Autowired
-    private TodoService todoService;
-
+   
+    private final TodoService todoService;
+    public TodoController(TodoService todoService) {
+        this.todoService = todoService;
+    }
     //  GET: Tüm Todo'ları getir
     @GetMapping
     public List<Todo> getAllTodos() {
@@ -25,16 +26,9 @@ public class TodoController {
 
     //  GET: Belirli ID'li Todo'yu getir
     @GetMapping("/{id}")
-    public ResponseEntity<?> getTodoById(@PathVariable Long id) {
-        Optional<Todo> todo = todoService.getTodoById(id);
-        if (todo.isPresent()) {
-            return ResponseEntity.ok(todo.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Todo bulunamadı");
-        }
+    public Optional<Todo> getTodoById(@PathVariable Long id) {
+        return todoService.getTodoById(id);
     }
-
-
 
     //  POST: Yeni Todo oluştur
     @PostMapping
