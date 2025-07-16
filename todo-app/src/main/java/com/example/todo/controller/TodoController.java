@@ -1,6 +1,7 @@
 package com.example.todo.controller;
 
-import com.example.todo.Todo;
+import com.example.todo.entity.Todo;
+
 import com.example.todo.service.TodoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +13,11 @@ import java.util.Optional;
 @RequestMapping("/api/todos") // URL'ler bu kökten başlar: localhost:8080/api/todos
 public class TodoController {
 
-    @Autowired
-    private TodoService todoService;
-
+   
+    private final TodoService todoService;
+    public TodoController(TodoService todoService) {
+        this.todoService = todoService;
+    }
     //  GET: Tüm Todo'ları getir
     @GetMapping
     public List<Todo> getAllTodos() {
