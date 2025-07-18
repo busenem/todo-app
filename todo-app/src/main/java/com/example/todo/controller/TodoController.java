@@ -1,23 +1,24 @@
 package com.example.todo.controller;
 
 import com.example.todo.entity.Todo;
-
 import com.example.todo.service.TodoService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
-@RestController // Bu sınıf REST API'dir, JSON veri döner
-@RequestMapping("/api/todos") // URL'ler bu kökten başlar: localhost:8080/api/todos
+@RestController
+@RequestMapping("/api/todos")
 public class TodoController {
 
-   
     private final TodoService todoService;
+
     public TodoController(TodoService todoService) {
         this.todoService = todoService;
     }
+
     @GetMapping
     public List<Todo> getAllTodos() {
         return todoService.getAllTodos();
@@ -28,18 +29,25 @@ public class TodoController {
         return todoService.getTodoById(id);
     }
 
-    @PostMapping
-    public Todo createTodo(@RequestBody Todo todo) {
-        return todoService.createTodo(todo);
-    }
-
     @PutMapping("/{id}")
-    public Todo updateTodo(@PathVariable Long id, @RequestBody Todo todo) {
-        return todoService.updateTodo(id, todo);
+    public ResponseEntity<?> updateTodo(@PathVariable Long id, @RequestBody Todo todo) {
+        Todo updatedTodo = todoService.updateTodo(id, todo);
+        if (updatedTodo != null) {
+            return ResponseEntity.ok(updatedTodo);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                                 .body("Todo ID " + id + " bulunamadı.");
+        }
     }
 
     @DeleteMapping("/{id}")
-    public void deleteTodo(@PathVariable Long id) {
-        todoService.deleteTodo(id);
+    public ResponseEntity<String> deleteTodo(@PathVariable Long id) {
+        boolean deleted = todoService.deleteTodo(id);
+        if (deleted) {
+            return ResponseEntity.ok("Todo başarıyla silindi.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                                 .body("Todo ID " + id + " bulunamadı, silinemedi.");
+        }
     }
 }
