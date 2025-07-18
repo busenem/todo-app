@@ -41,9 +41,12 @@ public class TodoService {
             return todoRepository.save(existingTodo);
         }).orElse(null); // Eğer bulunamazsa null döner
     }
+    public boolean deleteTodo(Long id) {
+        if (todoRepository.existsById(id)) {
+            todoRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }}
 
-    // ✅ Todo'yu siler
-    public void deleteTodo(Long id) {
-        todoRepository.deleteById(id);
-    }
-}
+ 
